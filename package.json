@@ -1,0 +1,27 @@
+{
+    "name": "node-backup",
+    "version": "0.0.0",
+    "description": "Node script to run backups with rsync.",
+    "author": "Michael Novotny <http://manovotny.com/>",
+    "homepage": "http://manovotny.com/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/manovotny/node-backup.git"
+    },
+    "keywords": [
+        "rsync",
+        "backup",
+        "node"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/manovotny/node-backup/issues"
+    },
+    "bin": {
+        "backup": "bin/backup.js"
+    },
+    "dependencies": {
+        "lodash": "^3.9.1",
+        "rsyncwrapper": "^0.4.2"
+    }
+}
