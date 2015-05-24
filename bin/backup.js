@@ -2,9 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash'),
-    options = require('./options'),
-    output = require('./output').output,
-    rsync = require('rsyncwrapper').rsync;
+var rsync = require('./rsync'),
 
-rsync(options.localToServer, output);
+    home = '/Users/manovotny/',
+    serverRoot = '8058@usw-s008.rsync.net:manovotny-rmbp/';
+
+rsync.begin();
+
+rsync.exec(
+    home + 'Applications',
+    serverRoot + 'Home',
+    'Backing up Applications'
+);
+
+rsync.end();
