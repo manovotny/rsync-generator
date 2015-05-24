@@ -60,8 +60,15 @@ function generateCommand(source, destination) {
         .command();
 }
 
+function isRunning() {
+    var backupProcesses = shell.exec('ps -ef | grep "node /usr/local/bin/backup" | grep -v grep  | wc -l', {silent: true}).output;
+
+    return parseInt(backupProcesses.trim()) > 1;
+}
+
 module.exports = {
     begin: begin,
     end: end,
-    exec: exec
+    exec: exec,
+    isRunning: isRunning
 };
