@@ -22,4 +22,10 @@ rsync.exec(
     'Backing up Applications'
 );
 
+rsync.exec(
+    home + 'Backup',
+    serverRoot + 'Home',
+    'Backing up Backup'
+);
+
 rsync.end();
