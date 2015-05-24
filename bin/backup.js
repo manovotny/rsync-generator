@@ -28,4 +28,10 @@ rsync.exec(
     'Backing up Backup'
 );
 
+rsync.exec(
+    home + 'Design',
+    serverRoot + 'Home',
+    'Backing up Design'
+);
+
 rsync.end();
