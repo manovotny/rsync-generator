@@ -40,7 +40,6 @@ function generateCommand(source, destination) {
     return new Rsync()
         .set('compress')
         .set('delete')
-        .set('dry-run')
         .set('links')
         .set('progress')
         .set('recursive')
