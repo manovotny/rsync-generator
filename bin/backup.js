@@ -4,34 +4,18 @@
 
 var shell = require('shelljs'),
 
-    rsync = require('./rsync'),
+    home = require('./home'),
+    process = require('./process'),
+    root = require('./root');
 
-    home = '/Users/manovotny/',
-    serverRoot = '8058@usw-s008.rsync.net:manovotny-rmbp/';
-
-if (rsync.isRunning()) {
+if (process.running()) {
     console.log('The backup script is already running.');
     shell.exit(0);
 }
 
-rsync.begin();
+process.begin();
 
-rsync.exec(
-    home + 'Applications',
-    serverRoot + 'Home',
-    'Backing up Applications'
-);
+root.backup();
+home.backup();
 
-rsync.exec(
-    home + 'Backup',
-    serverRoot + 'Home',
-    'Backing up Backup'
-);
-
-rsync.exec(
-    home + 'Design',
-    serverRoot + 'Home',
-    'Backing up Design'
-);
-
-rsync.end();
+process.end();

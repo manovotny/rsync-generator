@@ -1,45 +1,32 @@
-#! /usr/bin/env node
-
 'use strict';
 
 var Rsync = require('rsync'),
 
-    moment = require('moment'),
     shell = require('shelljs');
 
-function getCurrentDateAndTime() {
-    return moment().format('MMMM Do YYYY, h:mm:ss a');
+function createDirectories(directories) {
+    shell.exec('ssh 8058@usw-s008.rsync.net mkdir -p manovotny-rmbp/' + directories);
 }
 
-function begin() {
-    console.log('Backup stated at ' + getCurrentDateAndTime());
-}
+function exec(data) {
+    var command = generateCommand(data);
 
-function exec(source, destination, message) {
-    var command = generateCommand(
-            source,
-            destination
-        );
-
-    if (message) {
+    if (data.message) {
         console.log('');
-        console.log(message);
+        console.log(data.message);
         console.log('');
     }
+
+    createDirectories(data.directories);
 
     shell.exec(command);
 }
 
-function end() {
-    console.log('');
-    console.log('Backup completed at ' + getCurrentDateAndTime());
-    console.log('');
-}
-
-function generateCommand(source, destination) {
+function generateCommand(data) {
     return new Rsync()
         .set('compress')
         .set('delete')
+        .set('dry-run')
         .set('links')
         .set('progress')
         .set('recursive')
@@ -54,20 +41,11 @@ function generateCommand(source, destination) {
             'node_modules',
             'vendor'
         ])
-        .source(source)
-        .destination(destination)
+        .source(data.source)
+        .destination(data.destination)
         .command();
 }
 
-function isRunning() {
-    var backupProcesses = shell.exec('ps -ef | grep "node /usr/local/bin/backup" | grep -v grep  | wc -l', {silent: true}).output;
-
-    return parseInt(backupProcesses.trim()) > 1;
-}
-
 module.exports = {
-    begin: begin,
-    end: end,
-    exec: exec,
-    isRunning: isRunning
+    exec: exec
 };
