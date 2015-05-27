@@ -2,11 +2,12 @@
 
 'use strict';
 
-var shell = require('shelljs'),
+var _ = require('lodash'),
+    shell = require('shelljs'),
 
-    home = require('./home'),
     process = require('./process'),
-    root = require('./root');
+    rsync = require('./rsync'),
+    sources = require('./sources');
 
 if (process.running()) {
     console.log('The backup script is already running.');
@@ -15,7 +16,12 @@ if (process.running()) {
 
 process.begin();
 
-root.backup();
-home.backup();
+_.each(sources, function(source){
+    rsync.exec({
+        source: source,
+        destination: '8058@usw-s008.rsync.net:manovotny-rmbp/',
+        message: 'Backing up: ' + source
+    });
+});
 
 process.end();

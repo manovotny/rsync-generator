@@ -1,7 +1,10 @@
 'use strict';
 
 var moment = require('moment'),
-    shell = require('shelljs');
+    humanizeDuration = require("humanize-duration"),
+    shell = require('shelljs'),
+
+    startDate;
 
 function getCurrentDateAndTime() {
     return moment().format('MMMM Do YYYY, h:mm:ss a');
@@ -9,11 +12,15 @@ function getCurrentDateAndTime() {
 
 function begin() {
     console.log('Backup stated at ' + getCurrentDateAndTime());
+    startDate = new Date();
 }
 
 function end() {
+    var elapsedTime = humanizeDuration(new Date() - startDate);
+
     console.log('');
     console.log('Backup completed at ' + getCurrentDateAndTime());
+    console.log('Total elapsed time:  ' + elapsedTime);
     console.log('');
 }
 

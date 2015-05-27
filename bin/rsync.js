@@ -4,32 +4,14 @@ var Rsync = require('rsync'),
 
     shell = require('shelljs');
 
-function createDirectories(directories) {
-    shell.exec('ssh 8058@usw-s008.rsync.net mkdir -p manovotny-rmbp/' + directories);
-}
-
-function exec(data) {
-    var command = generateCommand(data);
-
-    if (data.message) {
-        console.log('');
-        console.log(data.message);
-        console.log('');
-    }
-
-    createDirectories(data.directories);
-
-    shell.exec(command);
-}
-
 function generateCommand(data) {
     return new Rsync()
         .set('compress')
         .set('delete')
-        .set('dry-run')
         .set('links')
         .set('progress')
         .set('recursive')
+        .set('relative')
         .set('stats')
         .set('times')
         .set('verbose')
@@ -44,6 +26,18 @@ function generateCommand(data) {
         .source(data.source)
         .destination(data.destination)
         .command();
+}
+
+function exec(data) {
+    var command = generateCommand(data);
+
+    if (data.message) {
+        console.log('');
+        console.log(data.message);
+        console.log('');
+    }
+
+    shell.exec(command);
 }
 
 module.exports = {
