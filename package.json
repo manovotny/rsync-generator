@@ -1,30 +1,30 @@
 {
-    "name": "node-backup",
-    "version": "0.0.0",
-    "description": "Node script to run backups with rsync.",
-    "author": "Michael Novotny <http://manovotny.com/>",
-    "homepage": "http://manovotny.com/",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/manovotny/node-backup.git"
-    },
-    "keywords": [
-        "rsync",
-        "backup",
-        "node"
-    ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/manovotny/node-backup/issues"
-    },
-    "bin": {
-        "backup": "bin/backup.js"
-    },
-    "dependencies": {
-        "humanize-duration": "^2.8.0",
-        "lodash": "^3.9.2",
-        "moment": "^2.10.3",
-        "rsync": "^0.4.0",
-        "shelljs": "^0.5.0"
-    }
+  "name": "node-backup",
+  "version": "0.0.0",
+  "description": "Node script to run backups with rsync.",
+  "author": "Michael Novotny <http://manovotny.com/>",
+  "homepage": "http://manovotny.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manovotny/node-backup.git"
+  },
+  "keywords": [
+    "rsync",
+    "backup",
+    "node"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manovotny/node-backup/issues"
+  },
+  "bin": {
+    "backup": "bin/backup.js"
+  },
+  "dependencies": {
+    "humanize-duration": "^2.8.0",
+    "lodash": "^3.9.2",
+    "moment": "^2.10.3",
+    "rsync": "^0.4.0",
+    "shelljs": "^0.5.0"
+  }
 }
