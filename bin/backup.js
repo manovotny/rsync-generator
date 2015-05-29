@@ -3,25 +3,36 @@
 'use strict';
 
 var _ = require('lodash'),
+    fs = require('fs'),
     shell = require('shelljs'),
 
+    runBackup = require('./backup-run'),
+    writeBackup = require('./backup-write'),
     process = require('./process'),
-    rsync = require('./rsync'),
-    sources = require('./sources');
+    validate = require('./validate'),
+
+    configPath = './bin/config.json',
+    config;
 
 if (process.running()) {
     console.log('The backup script is already running.');
     shell.exit(0);
 }
 
-process.begin();
+if (fs.existsSync(configPath)) {
+    config = JSON.parse(fs.readFileSync('./bin/config.json', 'utf8'));
+} else {
+    console.log('Cannot find config file.');
+    shell.exit(0);
+}
 
-_.each(sources, function(source){
-    rsync.exec({
-        source: source,
-        destination: '8058@usw-s008.rsync.net:manovotny-rmbp/',
-        message: 'Backing up: ' + source
-    });
-});
+if (!validate.config(config)) {
+    console.log('Invalid config file.');
+    shell.exit(0);
+}
 
-process.end();
+if (config.hasOwnProperty('write') && config.write.length) {
+    writeBackup.exec(config);
+} else {
+    runBackup.exec(config);
+}
