@@ -2,37 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash'),
-    fs = require('fs'),
-    shell = require('shelljs'),
+var config = require('./config'),
+    run = require('./run'),
+    write = require('./write'),
+    validate = require('./validate');
 
-    runBackup = require('./backup-run'),
-    writeBackup = require('./backup-write'),
-    process = require('./process'),
-    validate = require('./validate'),
+validate.running();
 
-    configPath = './bin/config.json',
-    config;
-
-if (process.running()) {
-    console.log('The backup script is already running.');
-    shell.exit(0);
-}
-
-if (fs.existsSync(configPath)) {
-    config = JSON.parse(fs.readFileSync('./bin/config.json', 'utf8'));
+if (config.write) {
+    write.exec();
 } else {
-    console.log('Cannot find config file.');
-    shell.exit(0);
-}
-
-if (!validate.config(config)) {
-    console.log('Invalid config file.');
-    shell.exit(0);
-}
-
-if (config.hasOwnProperty('write') && config.write.length) {
-    writeBackup.exec(config);
-} else {
-    runBackup.exec(config);
+    run.exec();
 }
