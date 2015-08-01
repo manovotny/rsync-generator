@@ -1,7 +1,7 @@
 {
   "name": "node-backup",
   "version": "0.0.0",
-  "description": "Node script to run backups with rsync.",
+  "description": "A node script to run or generate backups using rsync.",
   "author": "Michael Novotny <http://manovotny.com/>",
   "homepage": "http://manovotny.com/",
   "repository": {
