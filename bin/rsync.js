@@ -1,6 +1,8 @@
 'use strict';
 
-var Rsync = require('rsync');
+var Rsync = require('rsync'),
+
+    config = require('./config');
 
 function generateCommand(data) {
     return new Rsync()
@@ -14,13 +16,7 @@ function generateCommand(data) {
         .set('times')
         .set('verbose')
         .shell('ssh')
-        .exclude([
-            '.DS_Store',
-            '.localized',
-            'bower_components',
-            'node_modules',
-            'vendor'
-        ])
+        .exclude(config.exclude)
         .source(data.source)
         .destination(data.destination)
         .command();
