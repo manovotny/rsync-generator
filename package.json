@@ -4,6 +4,9 @@
   "description": "A node script to run or generate backups using rsync.",
   "author": "Michael Novotny <http://manovotny.com/>",
   "homepage": "http://manovotny.com/",
+  "scripts": {
+    "start": "node ./bin/backup.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/manovotny/node-backup.git"
@@ -18,7 +21,7 @@
     "url": "https://github.com/manovotny/node-backup/issues"
   },
   "bin": {
-    "backup": "bin/backup.js"
+    "backup": "./bin/backup.js"
   },
   "dependencies": {
     "humanize-duration": "^2.8.0",
