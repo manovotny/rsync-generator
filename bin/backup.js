@@ -1,16 +1,63 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
-'use strict';
+const {join} = require('path');
 
-var config = require('./config'),
-    run = require('./run'),
-    write = require('./write'),
-    validate = require('./validate');
+const {shell} = require('execa');
+const {readJson, writeFile} = require('fs-extra');
+const pathExists = require('path-exists');
 
-validate.running();
+const throwError = (message) => {
+    console.log(message);
+    process.exit(1);
+};
 
-if (config.write) {
-    write.exec();
-} else {
-    run.exec();
-}
+(async () => {
+    const commands = ['clear'];
+    const configPath = join(process.env.HOME, '.backup', 'config.json');
+    const exists = await pathExists(configPath);
+
+    if (!exists) {
+        throwError('Configuration file required at `~/.backup/config.json`.');
+    }
+
+    const {destination, exclude, sources, write} = await readJson(configPath);
+
+    let excludes = '';
+
+    if (!destination) {
+        throwError('Configuration file requires a `destination` property.');
+    }
+
+    if (!sources) {
+        throwError('Configuration file requires a `sources` property.');
+    }
+
+    if (exclude) {
+        excludes = exclude.map((item) => `--exclude=${item}`).join(' ');
+    }
+
+    sources.forEach((source) => {
+        commands.push(
+            ...[
+                'echo ""',
+                `echo "Backing up: ${source}"`,
+                'echo ""',
+                `rsync --compress --delete --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} ${source} ${destination}`
+            ]
+        );
+    });
+
+    if (write) {
+        await writeFile(write, commands.join('\n'));
+        // shell.exec('chmod 777 ' + file);
+    } else {
+        /*
+         * var backupProcesses = shell.exec('ps -ef | grep "node /usr/local/bin/backup" | grep -v grep  | wc -l', {silent: true}).output;
+         * if (parseInt(backupProcesses.trim()) > 1) {
+         *     console.log('The backup script is already running.');
+         *     shell.exit(0);
+         * }
+         */
+        commands.forEach((command) => shell(command));
+    }
+})();
