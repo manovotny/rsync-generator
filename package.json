@@ -26,7 +26,7 @@
     },
     "scripts": {
         "lint": "eslint . --ext .json --ext .js",
-        "prettier": "prettier --write \"**/*.{js,json,md,mdx,yml}\"",
+        "prettier": "prettier --write \"**/*.{js,json,md,yml}\"",
         "start": "node ./bin/backup.js",
         "test": "yarn lint"
     },
@@ -36,7 +36,7 @@
         }
     },
     "lint-staged": {
-        "*.{js,json,md,mdx,yml}": [
+        "*.{js,json,md,yml}": [
             "prettier --write",
             "git add"
         ]
@@ -44,6 +44,7 @@
     "dependencies": {
         "execa": "1.0.0",
         "fs-extra": "7.0.0",
+        "listr": "0.14.2",
         "path-exists": "3.0.0"
     },
     "devDependencies": {

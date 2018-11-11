@@ -2,8 +2,9 @@
 
 const {join} = require('path');
 
-const {shell} = require('execa');
+const execa = require('execa');
 const {readJson, writeFile} = require('fs-extra');
+const Listr = require('listr');
 const pathExists = require('path-exists');
 
 const throwError = (message) => {
@@ -12,7 +13,7 @@ const throwError = (message) => {
 };
 
 (async () => {
-    const commands = ['clear'];
+    const verbose = process.argv.includes('--verbose');
     const configPath = join(process.env.HOME, '.backup', 'config.json');
     const exists = await pathExists(configPath);
 
@@ -21,6 +22,7 @@ const throwError = (message) => {
     }
 
     const {destination, exclude, sources, write} = await readJson(configPath);
+    const commands = [];
 
     let excludes = '';
 
@@ -36,21 +38,45 @@ const throwError = (message) => {
         excludes = exclude.map((item) => `--exclude=${item}`).join(' ');
     }
 
-    sources.forEach((source) => {
-        commands.push(
-            ...[
-                'echo ""',
-                `echo "Backing up: ${source}"`,
-                'echo ""',
-                `rsync --compress --delete --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} ${source} ${destination}`
-            ]
-        );
-    });
-
     if (write) {
+        commands.push('clear');
+
+        sources.forEach((source) => {
+            commands.push(
+                ...[
+                    'echo ""',
+                    `echo "Backing up: ${source}"`,
+                    'echo ""',
+                    `rsync --compress --delete --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} "${source}" "${destination}"`
+                ]
+            );
+        });
+
         await writeFile(write, commands.join('\n'));
-        // shell.exec('chmod 777 ' + file);
+        await execa('chmod', ['777', write]);
     } else {
+        sources.forEach((source) => {
+            const command = `rsync --compress --delete --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} "${source}" "${destination}"`;
+
+            commands.push({
+                task: () => execa.shell(command),
+                title: source
+            });
+        });
+
+        const tasks = new Listr(commands, {
+            renderer: verbose ? 'verbose' : 'default'
+        });
+
+        console.log(`Backing up...`);
+
+        tasks
+            .run()
+            .then(() => console.log('Backup complete! 🎉'))
+            .catch((error) => {
+                console.error(error);
+            });
+
         /*
          * var backupProcesses = shell.exec('ps -ef | grep "node /usr/local/bin/backup" | grep -v grep  | wc -l', {silent: true}).output;
          * if (parseInt(backupProcesses.trim()) > 1) {
@@ -58,6 +84,5 @@ const throwError = (message) => {
          *     shell.exit(0);
          * }
          */
-        commands.forEach((command) => shell(command));
     }
 })();

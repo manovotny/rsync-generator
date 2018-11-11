@@ -2069,7 +2069,7 @@ listr-verbose-renderer@^0.4.0:
     date-fns "^1.27.2"
     figures "^1.7.0"
 
-listr@^0.14.1:
+listr@0.14.2, listr@^0.14.1:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/listr/-/listr-0.14.2.tgz#cbe44b021100a15376addfc2d79349ee430bfe14"
   integrity sha512-vmaNJ1KlGuGWShHI35X/F8r9xxS0VTHh9GejVXwSN20fG5xpq3Jh4bJbnumoT6q5EDM/8/YP1z3YMtQbFmhuXw==
