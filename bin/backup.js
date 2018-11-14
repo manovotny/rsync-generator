@@ -23,17 +23,26 @@ const getExcludes = (excludes) => {
 const generateRsyncCommand = ({destination, excludes, source}) =>
     `rsync --compress --delete --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} "${source}" "${destination}"`;
 
-const run = ({destination, excludes, sources, verbose}) => {
+const run = async ({destination, excludes, sources, verbose}) => {
     const commands = [];
+    const notFound = [];
 
-    sources.forEach((source) => {
-        const command = generateRsyncCommand({destination, excludes, source});
+    await Promise.all(
+        sources.map(async (source) => {
+            const exists = await pathExists(source);
 
-        commands.push({
-            task: () => execa.shell(command),
-            title: source
-        });
-    });
+            if (exists) {
+                const command = generateRsyncCommand({destination, excludes, source});
+
+                commands.push({
+                    task: () => execa.shell(command),
+                    title: source
+                });
+            } else {
+                notFound.push(source);
+            }
+        })
+    );
 
     const tasks = new Listr(commands, {
         renderer: verbose ? 'verbose' : 'default'
@@ -43,7 +52,13 @@ const run = ({destination, excludes, sources, verbose}) => {
 
     tasks
         .run()
-        .then(() => console.log('Backup complete! 🎉'))
+        .then(() => {
+            console.log('Backup complete! 🎉');
+
+            if (notFound.length) {
+                console.log('Sources not found:', notFound);
+            }
+        })
         .catch((error) => {
             console.error(error);
         });
@@ -51,20 +66,33 @@ const run = ({destination, excludes, sources, verbose}) => {
 
 const write = async ({destination, excludes, output, sources}) => {
     const commands = ['clear'];
+    const notFound = [];
 
-    sources.forEach((source) => {
-        commands.push(
-            ...[
-                'echo ""',
-                `echo "Backing up: ${source}"`,
-                'echo ""',
-                generateRsyncCommand({destination, excludes, source})
-            ]
-        );
-    });
+    await Promise.all(
+        sources.map(async (source) => {
+            const exists = await pathExists(source);
+
+            if (exists) {
+                commands.push(
+                    ...[
+                        'echo ""',
+                        `echo "Backing up: ${source}"`,
+                        'echo ""',
+                        generateRsyncCommand({destination, excludes, source})
+                    ]
+                );
+            } else {
+                notFound.push(source);
+            }
+        })
+    );
 
     await writeFile(output, commands.join('\n'));
     await execa('chmod', ['777', output]);
+
+    if (notFound.length) {
+        console.log('Sources not found:', notFound);
+    }
 };
 
 (async () => {
@@ -90,7 +118,7 @@ const write = async ({destination, excludes, output, sources}) => {
     if (output) {
         await write({destination, excludes, output, sources});
     } else {
-        run({destination, excludes, sources, verbose});
+        await run({destination, excludes, sources, verbose});
     }
 
     /*
