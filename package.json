@@ -25,9 +25,9 @@
         "backup": "./bin/backup.js"
     },
     "scripts": {
-        "lint": "eslint . --ext .json --ext .js",
-        "prettier": "prettier --write \"**/*.{js,json,md,yml}\"",
-        "start": "node ./bin/backup.js",
+        "lint": "eslint . --ext .json --ext .js --ext .mjs",
+        "prettier": "prettier --write \"**/*.{html,js,json,md,mdx,mjs,yml}\"",
+        "start": "node --experimental-modules ./bin/backup.mjs",
         "test": "yarn lint"
     },
     "husky": {
@@ -36,7 +36,7 @@
         }
     },
     "lint-staged": {
-        "*.{js,json,md,yml}": [
+        "*.{html,js,json,md,mdx,mjs,yml}": [
             "prettier --write",
             "git add"
         ]
