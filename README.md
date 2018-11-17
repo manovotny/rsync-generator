@@ -1,4 +1,3 @@
-node-backup
----
+# rsync-generator
 
-A node script to run or generate backups using rsync.
+> A node script to run or generate rsync scripts for backups.

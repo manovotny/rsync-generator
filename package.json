@@ -1,34 +1,57 @@
 {
-  "name": "node-backup",
-  "version": "0.0.0",
-  "description": "A node script to run or generate backups using rsync.",
-  "author": "Michael Novotny <http://manovotny.com/>",
-  "homepage": "http://manovotny.com/",
-  "scripts": {
-    "start": "node ./bin/backup.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/manovotny/node-backup.git"
-  },
-  "keywords": [
-    "rsync",
-    "backup",
-    "node"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/manovotny/node-backup/issues"
-  },
-  "bin": {
-    "backup": "./bin/backup.js"
-  },
-  "dependencies": {
-    "humanize-duration": "^2.8.0",
-    "lodash": "^3.9.2",
-    "moment": "^2.10.3",
-    "rsync": "^0.4.0",
-    "shelljs": "^0.5.0",
-    "yargs": "^3.10.0"
-  }
+    "name": "rsync-generator",
+    "version": "0.0.0",
+    "description": "A node script to run or generate rsync scripts for backups.",
+    "author": {
+        "name": "Michael Novotny",
+        "email": "manovotny@gmail.com",
+        "url": "https://manovotny.com"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/manovotny/rsync-generator.git"
+    },
+    "keywords": [
+        "rsync",
+        "backup",
+        "node"
+    ],
+    "engines": {
+        "node": ">=10.3.0",
+        "yarn": ">=1.0.0"
+    },
+    "bin": {
+        "backup": "./bin/backup.js"
+    },
+    "scripts": {
+        "lint": "eslint . --ext .json --ext .js --ext .mjs",
+        "prettier": "prettier --write \"**/*.{html,js,json,md,mdx,mjs,yml}\"",
+        "start": "node --experimental-modules ./bin/backup.mjs",
+        "test": "yarn lint"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{html,js,json,md,mdx,mjs,yml}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "dependencies": {
+        "execa": "1.0.0",
+        "fs-extra": "7.0.1",
+        "listr": "0.14.3",
+        "path-exists": "3.0.0"
+    },
+    "devDependencies": {
+        "eslint": "4.19.1",
+        "eslint-config-get-off-my-lawn-prettier": "1.0.0",
+        "husky": "1.1.4",
+        "lint-staged": "8.0.5",
+        "prettier": "1.15.2"
+    }
 }
