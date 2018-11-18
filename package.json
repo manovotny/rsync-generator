@@ -1,6 +1,6 @@
 {
     "name": "rsync-generator",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "A node script to run or generate rsync scripts for backups.",
     "author": {
         "name": "Michael Novotny",
