@@ -13,7 +13,7 @@ $ npm i -g rsync-generator
 ### Yarn
 
 ```
-$ yarn add -g rsync-generator
+$ yarn global add rsync-generator
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Once that's in place, run `rsync-generator` from a command line and that's it!
 
 ## Configuration
 
-The `config.json` file can have the following options.
+The `~/.backup/config.json` file can have the following options.
 
 Example:
 
