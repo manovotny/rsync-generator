@@ -25,6 +25,9 @@
     "bin": {
         "backup": "./bin/backup.js"
     },
+    "files": [
+        "bin"
+    ],
     "scripts": {
         "check": "npm-check -u",
         "lint": "eslint . --ext .cjs,.js,.json",
