@@ -1,8 +1,8 @@
-import execa from 'execa';
+import {execa} from 'execa';
 import fs from 'fs-extra';
-import pathExists from 'path-exists';
+import {pathExists} from 'path-exists';
 
-import {generateRsyncCommand} from './utils';
+import {generateRsyncCommand} from './utils.js';
 
 export default async ({destination, excludes, output, sources}) => {
     const commands = ['clear'];
@@ -14,16 +14,14 @@ export default async ({destination, excludes, output, sources}) => {
 
             if (exists) {
                 commands.push(
-                    ...[
-                        'echo ""',
-                        `echo "Backing up: ${source}"`,
-                        'echo ""',
-                        generateRsyncCommand({
-                            destination,
-                            excludes,
-                            source
-                        })
-                    ]
+                    'echo ""',
+                    `echo "Backing up: ${source}"`,
+                    'echo ""',
+                    generateRsyncCommand({
+                        destination,
+                        excludes,
+                        source,
+                    })
                 );
             } else {
                 notFound.push(source);

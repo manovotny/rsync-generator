@@ -1,11 +1,13 @@
-import path from 'path';
+#!/usr/bin/env node
+import path from 'node:path';
+import process from 'node:process';
 
 import fs from 'fs-extra';
-import pathExists from 'path-exists';
+import {pathExists} from 'path-exists';
 
-import run from './run';
-import {getExcludes} from './utils';
-import write from './write';
+import run from './run.js';
+import {getExcludes} from './utils.js';
+import write from './write.js';
 
 (async () => {
     const verbose = process.argv.includes('--verbose');
@@ -27,21 +29,19 @@ import write from './write';
         throw new Error('Configuration file requires a `sources` property.');
     }
 
-    if (output) {
-        await write({
-            destination,
-            excludes,
-            output,
-            sources
-        });
-    } else {
-        await run({
-            destination,
-            excludes,
-            sources,
-            verbose
-        });
-    }
+    await (output
+        ? write({
+              destination,
+              excludes,
+              output,
+              sources,
+          })
+        : run({
+              destination,
+              excludes,
+              sources,
+              verbose,
+          }));
 
     /*
      * var backupProcesses = shell.exec('ps -ef | grep "node /usr/local/bin/backup" | grep -v grep  | wc -l', {silent: true}).output;

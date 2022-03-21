@@ -1,8 +1,8 @@
-import execa from 'execa';
+import {execaCommand} from 'execa';
 import Listr from 'listr';
-import pathExists from 'path-exists';
+import {pathExists} from 'path-exists';
 
-import {generateRsyncCommand} from './utils';
+import {generateRsyncCommand} from './utils.js';
 
 export default async ({destination, excludes, sources, verbose}) => {
     const commands = [];
@@ -16,12 +16,12 @@ export default async ({destination, excludes, sources, verbose}) => {
                 const command = generateRsyncCommand({
                     destination,
                     excludes,
-                    source
+                    source,
                 });
 
                 commands.push({
-                    task: () => execa.shell(command),
-                    title: source
+                    task: () => execaCommand(command, {shell: true}),
+                    title: source,
                 });
             } else {
                 notFound.push(source);
@@ -30,7 +30,7 @@ export default async ({destination, excludes, sources, verbose}) => {
     );
 
     const tasks = new Listr(commands, {
-        renderer: verbose ? 'verbose' : 'default'
+        renderer: verbose ? 'verbose' : 'default',
     });
 
     console.log(`Backing up...`);
