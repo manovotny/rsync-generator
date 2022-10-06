@@ -169,16 +169,18 @@ launchctl load /Users/USERNAME/Library/LaunchAgents/backup.plist
 > launchctl unload /Users/USERNAME/Library/LaunchAgents/backup.plist
 > ```
 
-#### Working with macOS Catalina's Increased Security
+#### Working with macOS Increased Security
 
 You can skip this section if you're running a macOS version prior to Catalina.
 
-Catalina [really turned the screws on security](https://www.wired.com/story/macos-catalina-privacy-security-features/) compared to previous versions of macOS. All around good changes to keep users safe, but it means we need to grant some permissions for our backup script to run.
+Catalina (and above) [really turned the screws on security](https://www.wired.com/story/macos-catalina-privacy-security-features/) compared to previous versions of macOS. All around good changes to keep users safe, but it means we need to grant some permissions for our backup script to run.
 
 1. Navigate to `System Preferences > Security > Privacy > Full Disk Access`.
 1. Click the padlock in the lower left to make changes, if it's not already unlocked.
-1. Click the `+` and add `bash`, which is located at `/bin/bash`.
-1. Click the `+` and add `rsync`, which is located at `/usr/local/Cellar/rsync/3.1.2/bin/rsync`.
+1. Click the `+` and add:
+    - `bash`, which is located at `/bin/bash`
+    - `zsh`, which is located at `/bin/zsh`
+    - `rsync`, which is located at `/opt/homebrew/bin`.
 
 #### Conclusion
 
