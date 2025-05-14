@@ -1,5 +1,5 @@
 const generateRsyncCommand = ({destination, excludes, source}) =>
-    `rsync --compress --delete --delete-excluded --links --progress --recursive --relative --stats --times --verbose --rsh=ssh ${excludes} "${source}" "${destination}"`;
+    `rsync --compress --delete --delete-excluded --links --progress --recursive --stats --times --verbose --rsh=ssh ${excludes} "${source}" "${destination}"`;
 
 const getExcludes = (excludes) => {
     if (excludes) {
