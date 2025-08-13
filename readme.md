@@ -91,14 +91,14 @@ You can use the guide above for many services that use SSH.
 
 Unfortunately, macOS ships with an old version of rsync. You'll want to update this for way better performance and newer features.
 
-1. Install [Homebrew](https://brew.sh), if you don't have that already install.
-1. Then install an updated version of rysnc by running `brew install rsync` from a command line.
-1. When installation is complete, you'll want to navigate to `/private/etc/paths`, open the file, and ensure `/usr/local/bin` is listed above above `/usr/bin`. This ensures you're running the Homebrew installed version of rsync instead of the version that comes with macOs.
+1. Install [Homebrew](https://brew.sh), if you don't have that already install
+1. Then install an updated version of rysnc by running `brew install rsync` from a command line
+1. When installation is complete, you'll want to navigate to `/private/etc/paths`, open the file, and ensure `/usr/local/bin` is listed above above `/usr/bin`. This ensures you're running the Homebrew installed version of rsync instead of the version that comes with macOS
 
 ### Setup Configuration
 
-1. Create a [configuration as specified above](#usage).
-1. You want to [specify an output location](#output). I typically use the same directory as the config, `/Users/USERNAME/.config/backup/run.sh`.
+1. Create a [configuration as specified above](#usage)
+1. You want to [specify an output location](#output). I typically use the same directory as the config, `/Users/USERNAME/.config/backup/run.sh`
 
 ### Setup Automation
 
@@ -108,10 +108,10 @@ We're going to create a [launchd](https://www.launchd.info) script. That likely 
 
 A LaunchAgent is just a fancy Apple word for a scheduled job. We need to create a file that will tell our backup script to run on a given interval.
 
-1. Start by showing hidden files on your Mac by pressing `⌘⇧.` in any Finder window (you can press that same sequence again to hide files).
-1. Navigate to `~/Library/LaunchAgents`.
-1. Create a new file named `backup.plist` in the folder.
-1. Copy and paste the following into the `backup.plist` file contents.
+1. Start by showing hidden files on your Mac by pressing `⌘⇧.` in any Finder window (you can press that same sequence again to hide files)
+1. Navigate to `~/Library/LaunchAgents`
+1. Create a new file named `backup.plist` in the folder
+1. Copy and paste the following into the `backup.plist` file contents
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
