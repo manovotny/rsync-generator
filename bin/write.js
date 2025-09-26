@@ -1,40 +1,40 @@
-import {execa} from 'execa';
-import fs from 'fs-extra';
-import {pathExists} from 'path-exists';
+import { execa } from "execa";
+import { writeFile } from "fs-extra";
+import { pathExists } from "path-exists";
 
-import {generateDefaultCommends, generateRsyncCommand} from './utils.js';
+import { generateDefaultCommends, generateRsyncCommand } from "./utils.js";
 
-export default async ({destination, excludes, output, sources}) => {
-    const commands = generateDefaultCommends(destination);
-    const notFound = [];
+export default async ({ destination, excludes, output, sources }) => {
+  const commands = generateDefaultCommends(destination);
+  const notFound = [];
 
-    await Promise.all(
-        sources.map(async (source) => {
-            const exists = await pathExists(source);
+  await Promise.all(
+    sources.map(async (source) => {
+      const exists = await pathExists(source);
 
-            if (exists) {
-                commands.push(
-                    'echo ""',
-                    `echo "Backing up: ${source}"`,
-                    'echo ""',
-                    generateRsyncCommand({
-                        destination,
-                        excludes,
-                        source,
-                    })
-                );
-            } else {
-                notFound.push(source);
-            }
-        })
-    );
+      if (exists) {
+        commands.push(
+          'echo ""',
+          `echo "Backing up: ${source}"`,
+          'echo ""',
+          generateRsyncCommand({
+            destination,
+            excludes,
+            source,
+          }),
+        );
+      } else {
+        notFound.push(source);
+      }
+    }),
+  );
 
-    await fs.writeFile(output, commands.join('\n'));
-    await execa('chmod', ['777', output]);
+  await writeFile(output, commands.join("\n"));
+  await execa`chmod 777 ${output}`;
 
-    if (notFound.length) {
-        console.log('Sources not found:', notFound);
-    }
+  if (notFound.length) {
+    console.log("Sources not found:", notFound);
+  }
 
-    console.log(`Backup script successfully created at \`${output}\`.`);
+  console.log(`Backup script successfully created at \`${output}\`.`);
 };
