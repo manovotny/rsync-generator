@@ -5,7 +5,7 @@ import {pathExists} from 'path-exists';
 import {generateRsyncCommand} from './utils.js';
 
 export default async ({destination, excludes, sources, verbose}) => {
-    const commands = [];
+    const commands = [`echo "Backup started: $(date +'%m/%d/%Y %H:%M:%S')"`];
     const notFound = [];
 
     await Promise.all(

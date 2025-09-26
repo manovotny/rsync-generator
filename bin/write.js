@@ -5,7 +5,7 @@ import {pathExists} from 'path-exists';
 import {generateRsyncCommand} from './utils.js';
 
 export default async ({destination, excludes, output, sources}) => {
-    const commands = ['clear'];
+    const commands = ['clear', `echo "Backup started: $(date +'%m/%d/%Y %H:%M:%S')"`];
     const notFound = [];
 
     await Promise.all(
@@ -35,4 +35,6 @@ export default async ({destination, excludes, output, sources}) => {
     if (notFound.length) {
         console.log('Sources not found:', notFound);
     }
+
+    console.log(`Backup script successfully created at \`${output}\`.`);
 };

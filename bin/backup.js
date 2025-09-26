@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import path from 'node:path';
-import process from 'node:process';
 import os from 'node:os';
+import path from 'node:path';
+import process, {stdin, stdout} from 'node:process';
+import {createInterface} from 'node:readline/promises';
 
 import fs from 'fs-extra';
 import {pathExists} from 'path-exists';
@@ -32,6 +33,22 @@ import write from './write.js';
 
     const computerName = os.hostname().replace('.local', '');
     const destinationWithComputerName = path.join(destination, computerName);
+
+    // Warn if destination already exists
+    if (await pathExists(destinationWithComputerName)) {
+        const rl = await createInterface({input: stdin, output: stdout});
+        try {
+            const answer = await rl.question(
+                `Destination \`${destinationWithComputerName}\` already exists. Continue? (Y/n) `
+            );
+
+            if (answer.toLowerCase() !== 'y' && answer.toLowerCase() !== '') {
+                process.exit(1);
+            }
+        } finally {
+            rl.close();
+        }
+    }
 
     await (output
         ? write({
