@@ -8,7 +8,7 @@ import fs from 'fs-extra';
 import {pathExists} from 'path-exists';
 
 import run from './run.js';
-import {getExcludes} from './utils.js';
+import {generateExcludes} from './utils.js';
 import write from './write.js';
 
 (async () => {
@@ -21,7 +21,7 @@ import write from './write.js';
     }
 
     const {destination, exclude, output, sources} = await fs.readJson(configPath);
-    const excludes = getExcludes(exclude);
+    const excludes = generateExcludes(exclude);
 
     if (!destination) {
         throw new Error('Configuration file requires a `destination` property.');

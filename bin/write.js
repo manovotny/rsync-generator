@@ -2,10 +2,10 @@ import {execa} from 'execa';
 import fs from 'fs-extra';
 import {pathExists} from 'path-exists';
 
-import {generateRsyncCommand} from './utils.js';
+import {generateDefaultCommends, generateRsyncCommand} from './utils.js';
 
 export default async ({destination, excludes, output, sources}) => {
-    const commands = ['clear', `echo "Backup started: $(date +'%m/%d/%Y %H:%M:%S')"`];
+    const commands = generateDefaultCommends(destination);
     const notFound = [];
 
     await Promise.all(
