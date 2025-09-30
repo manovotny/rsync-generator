@@ -5,12 +5,12 @@
     "url": "https://manovotny.com"
   },
   "bin": {
-    "backup": "./bin/backup.js"
+    "backup": "./bin/backup.mjs"
   },
   "dependencies": {
     "execa": "9.6.0",
     "fs-extra": "11.3.2",
-    "listr": "0.14.3",
+    "listr2": "9.0.4",
     "path-exists": "5.0.0"
   },
   "description": "A node script to run or generate rsync scripts for backups.",
@@ -23,7 +23,7 @@
   "engines": {
     "node": ">=22"
   },
-  "exports": "./bin/backup.js",
+  "exports": "./bin/backup.mjs",
   "files": [
     "bin"
   ],
@@ -49,7 +49,7 @@
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "lint:staged": "lint-staged",
-    "start": "node ./bin/backup.js",
+    "start": "node ./bin/backup.mjs",
     "test": "npm run lint"
   },
   "type": "module",

@@ -1,3 +1,7 @@
+import os from "node:os";
+import process from "node:process";
+import { execa } from "execa";
+
 export const generateDefaultCommends = (destination) => {
   return [
     "clear",
@@ -15,4 +19,21 @@ export const generateExcludes = (excludes) => {
   }
 
   return [];
+};
+
+export const getComputerName = async () => {
+  switch (process.platform) {
+    case "win32":
+      return process.env.COMPUTERNAME;
+    case "darwin":
+      return (await execa`scutil --get ComputerName`).stdout.toString().trim();
+    case "linux": {
+      const prettyname = (await execa`hostnamectl --pretty`).stdout
+        .toString()
+        .trim();
+      return prettyname.length ? prettyname : os.hostname();
+    }
+    default:
+      return os.hostname();
+  }
 };
