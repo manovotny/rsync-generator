@@ -10,7 +10,7 @@ jobs:
               uses: actions/checkout@v2
             - name: Validate and extract release information
               id: release
-              uses: manovotny/github-releases-for-automated-package-publishing-action@v1.0.0
+              uses: manovotny/github-releases-for-automated-package-publishing-action@v2.0.1
             - name: Read node version
               id: nvm
               run: echo "::set-output name=version::$(cat .nvmrc)"
